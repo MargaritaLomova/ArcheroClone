@@ -34,24 +34,25 @@ public class MovingEnemyController : BaseEnemyController
         while (!_isDead)
         {
             var newPosition = new Vector3(_player.transform.position.x - _distanceToPlayer, _player.transform.position.y, _player.transform.position.z - _distanceToPlayer);
+
+            _animator.SetTrigger("Move");
+
             while (!_isDead && transform.position != newPosition)
             {
-                _animator.SetTrigger("Move");
-
                 transform.position = Vector3.Lerp(transform.position, newPosition, Time.fixedDeltaTime * _movementSpeed);
 
                 await Task.Delay((int)(Time.fixedDeltaTime * 1000));
             }
 
             callback?.Invoke();
-
-            await Task.Delay((int)(_timeBetweenReplacingAndShooting * 1000));
         }
     }
 
     protected async override void Shooting()
     {
         await Task.Delay((int)((_timeBetweenShooting + _timeBetweenReplacingAndShooting) * 1000));
+
+        Debug.Log($"Shooting = {_isDead}");
 
         if (!_isDead)
             base.Shooting();

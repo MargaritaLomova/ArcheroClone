@@ -331,7 +331,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.2083919
+  m_Radius: 0.3
   m_Height: 1.1666331
   m_Direction: 1
   m_Center: {x: 0.019093513, y: 0.56585956, z: -0.019093275}
@@ -348,6 +348,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 6072215297198338097}
+  _playerHealth: {fileID: 0}
+  _playerMoney: {fileID: 0}
   _bulletPrefab: {fileID: 7202545157851300619, guid: c6ec81beb376bf9439d7caef9907dff6, type: 3}
   _rotationSpeed: 700
   _movementSpeed: 10
