@@ -1,30 +1,48 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Components")]
+    [SerializeField]
+    private Animator _animator;
+
+    [Space]
+    [Header("Variables")]
+    [SerializeField]
+    private PlayerHealthController _playerHealth;
+    [SerializeField]
+    private PlayerMoneyController _playerMoney;
+
+    [Space]
+    [Header("Prefabs")]
+    [SerializeField]
+    private BulletController _bulletPrefab;
+
+    [Space]
+    [Header("Variables")]
     [SerializeField]
     private float _rotationSpeed;
     [SerializeField]
     private float _movementSpeed;
-
     [SerializeField]
-    private Animator _animator;
+    private int _startHealth = 100;
 
     public Action OnMoveAction { get; set; }
 
     private PlayerControl _inputControls;
+
+    private int _health;
 
     private bool _isMove;
 
     private void Awake()
     {
         _inputControls = new PlayerControl();
+        _health = _startHealth;
+        _playerHealth.UpdateText(_health, false);
 
         _inputControls.Player.Move.performed += OnMove;
         _inputControls.Player.Move.canceled += OnMoveStopped;
@@ -38,6 +56,20 @@ public class PlayerController : MonoBehaviour
     private void OnDisable()
     {
         _inputControls.Disable();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("EnemyBullet"))
+        {
+            _animator.SetTrigger("Hit");
+
+            var currentDamage = collision.gameObject.GetComponent<BulletController>().Damage;
+            _health -= currentDamage;
+            _playerHealth.UpdateText(_health);
+            if (_health <= 0)
+                Death();
+        }
     }
 
     private void OnMove(InputAction.CallbackContext context)
@@ -79,5 +111,10 @@ public class PlayerController : MonoBehaviour
             }
             await Task.Delay((int)(Time.fixedDeltaTime * 1000));
         }
+    }
+
+    private void Death()
+    {
+        _animator.SetTrigger("Death");
     }
 }

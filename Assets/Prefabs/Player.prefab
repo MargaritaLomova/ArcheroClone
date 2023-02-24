@@ -284,7 +284,7 @@ GameObject:
   - component: {fileID: 5925883927850160991}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -347,9 +347,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37879179d4e55f042ab23f708807a54a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animator: {fileID: 6072215297198338097}
+  _bulletPrefab: {fileID: 7202545157851300619, guid: c6ec81beb376bf9439d7caef9907dff6, type: 3}
   _rotationSpeed: 700
   _movementSpeed: 10
-  _animator: {fileID: 6072215297198338097}
+  _startHealth: 100
 --- !u!1 &6378713860873784678
 GameObject:
   m_ObjectHideFlags: 0
