@@ -8,11 +8,14 @@ public class BulletController : MonoBehaviour
     [SerializeField]
     private float _maxLifeTime = 5f;
     [SerializeField]
+    private float _movementSpeed = 25f;
+    [SerializeField]
     private List<string> _targetTags = new List<string>();
 
-    public int Damage { get; set; }
+    public int Damage { get; private set; }
     public bool IsDestroyed { get; private set; }
 
+    private Transform _target;
     private float _currentLifeTime;
 
     private void Awake()
@@ -26,17 +29,33 @@ public class BulletController : MonoBehaviour
         IsDestroyed = true;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnApplicationQuit()
     {
-        if (_targetTags.Contains(collision.gameObject.tag))
+        Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (_targetTags.Contains(collider.tag))
             Destroy(gameObject);
+    }
+
+    public void Set(Transform shooter, int damage, Transform target = null)
+    {
+        transform.position = new Vector3(shooter.position.x, shooter.position.y + (shooter.localScale.y * 0.3f), shooter.position.z);
+        transform.rotation = shooter.rotation;
+        Damage = damage;
+        _target = target;
     }
 
     private async void StartMoveBullet()
     {
         while (!IsDestroyed)
         {
-            transform.Translate(transform.forward, Space.World);
+            if (_target == null)
+                transform.Translate(transform.forward, Space.World);
+            else
+                transform.position = Vector3.Lerp(transform.position, _target.position, Time.fixedDeltaTime * _movementSpeed);
 
             _currentLifeTime += Time.fixedDeltaTime;
             await Task.Delay((int)(Time.fixedDeltaTime * 2 * 1000));

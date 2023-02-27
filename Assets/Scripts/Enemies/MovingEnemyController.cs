@@ -17,7 +17,7 @@ public class MovingEnemyController : BaseEnemyController
     {
         _player = FindObjectOfType<PlayerController>();
         _health = _startHealth;
-        _isDead = false;
+        IsDead = false;
         _isMoving = false;
 
         LookOnPlayer();
@@ -26,7 +26,7 @@ public class MovingEnemyController : BaseEnemyController
 
     private void MoveAndShoot()
     {
-        Helpers.Delay(() => _isDead, null, () =>
+        Helpers.Delay(() => IsDead, null, () =>
         {
             if(!_isMoving)
             {
@@ -36,18 +36,19 @@ public class MovingEnemyController : BaseEnemyController
                     _isMoving = true;
                     _animator.SetTrigger("Move");
 
-                    Helpers.Delay(() => _isDead || transform.position == newPosition,
+                    Helpers.Delay(() => IsDead || transform.position == newPosition,
                     () =>
                     {
-                        if (!_isDead)
+                        if (!IsDead)
                         {
                             _isMoving = false;
                             Shoot();
+                            _player.SortEnemiesByDistance();
                         }
                     },
                     () =>
                     {
-                        if (!_isDead)
+                        if (!IsDead)
                             transform.position = Vector3.Lerp(transform.position, newPosition, Time.fixedDeltaTime * _movementSpeed);
                     });
                 }

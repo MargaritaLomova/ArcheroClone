@@ -393,6 +393,7 @@ GameObject:
   - component: {fileID: 390491966551375135}
   - component: {fileID: 299898937520542529}
   - component: {fileID: 5385627757704301252}
+  - component: {fileID: 2129417801349984437}
   m_Layer: 0
   m_Name: StandingEnemy
   m_TagString: Enemy
@@ -453,7 +454,20 @@ MonoBehaviour:
   _bulletPrefab: {fileID: 5475797126668335375, guid: a1032e1903799c244a04056786236485, type: 3}
   _startHealth: 50
   _bulletDamage: 10
-  _timeBetweenShooting: 2
+  _timeBetweenShooting: 3
+--- !u!65 &2129417801349984437
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395351295937468197}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.2463859, z: 1.1947461}
+  m_Center: {x: 0, y: 0.5678815, z: -0.09737311}
 --- !u!1 &395406271329545957
 GameObject:
   m_ObjectHideFlags: 0

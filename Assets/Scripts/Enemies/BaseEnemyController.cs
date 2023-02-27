@@ -21,17 +21,17 @@ public class BaseEnemyController : MonoBehaviour
     [SerializeField]
     protected float _timeBetweenShooting;
 
+    public bool IsDead { get; protected set; }
+
     protected PlayerController _player;
 
     protected int _health;
-
-    protected bool _isDead;
 
     protected virtual void Awake()
     {
         _player = FindObjectOfType<PlayerController>();
         _health = _startHealth;
-        _isDead = false;
+        IsDead = false;
 
         Shooting();
         LookOnPlayer();
@@ -39,16 +39,16 @@ public class BaseEnemyController : MonoBehaviour
 
     private void OnDestroy()
     {
-        _isDead = true;
+        IsDead = true;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collider)
     {
-        if (collision.gameObject.CompareTag("PlayerBullet"))
+        if (collider.CompareTag("PlayerBullet"))
         {
             _animator.SetTrigger("Hit");
 
-            var currentDamage = collision.gameObject.GetComponent<BulletController>().Damage;
+            var currentDamage = collider.gameObject.GetComponent<BulletController>().Damage;
             _health -= currentDamage;
             if (_health <= 0)
                 Death();
@@ -57,9 +57,9 @@ public class BaseEnemyController : MonoBehaviour
 
     protected void LookOnPlayer()
     {
-        Helpers.Delay(() => _isDead, null, () =>
+        Helpers.Delay(() => IsDead, null, () =>
         {
-            if (!_isDead)
+            if (!IsDead)
                 transform.LookAt(_player.transform);
         });
     }
@@ -70,24 +70,23 @@ public class BaseEnemyController : MonoBehaviour
 
         await Task.Delay((int)(0.2f * 1000));
 
-        if (!_isDead)
+        if (!IsDead)
         {
             var newBullet = Instantiate(_bulletPrefab);
-            newBullet.transform.position = transform.position;
-            newBullet.transform.rotation = transform.rotation;
-            newBullet.Damage = _bulletDamage;
+            newBullet.Set(transform, _bulletDamage);
         }
     }
 
     private void Shooting()
     {
-        Helpers.Delay(() => _isDead, null, () => Shoot(), _timeBetweenShooting, true);
+        Helpers.Delay(() => IsDead, null, () => Shoot(), _timeBetweenShooting, true);
     }
 
     private void Death()
     {
-        _isDead = true;
+        _player.RemoveDeadEnemy(this);
+        IsDead = true;
         _animator.SetTrigger("Death");
-        Destroy(gameObject, 1f);
+        Destroy(gameObject, 2f);
     }
 }
