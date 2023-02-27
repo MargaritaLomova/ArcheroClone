@@ -11,13 +11,25 @@ public static class Helpers
         callback?.Invoke();
     }
 
-    public static async void Delay(Func<bool> waitForCondition, Callback callback, Callback toDoWhileWaiting = null, float timeForTick = 0.02f)
+    public static async void Delay(Func<bool> waitForCondition, Callback callback, Callback toDoWhileWaiting = null, float timeForTick = 0.02f, bool isTickBeforeToDoWhileWaiting = false)
     {
-        while (!waitForCondition())
+        if (isTickBeforeToDoWhileWaiting)
         {
-            toDoWhileWaiting?.Invoke();
-            await Task.Delay((int)(timeForTick * 1000));
+            while (!waitForCondition())
+            {
+                toDoWhileWaiting?.Invoke();
+                await Task.Delay((int)(timeForTick * 1000));
+            }
+            callback?.Invoke();
         }
-        callback?.Invoke();
+        else
+        {
+            while (!waitForCondition())
+            {
+                await Task.Delay((int)(timeForTick * 1000));
+                toDoWhileWaiting?.Invoke();
+            }
+            callback?.Invoke();
+        }
     }
 }

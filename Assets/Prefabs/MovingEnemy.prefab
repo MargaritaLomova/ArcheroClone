@@ -106,7 +106,8 @@ MonoBehaviour:
   _bulletDamage: 10
   _timeBetweenShooting: 2
   _movementSpeed: 5
-  _timeBetweenReplacingAndShooting: 1
+  _timeBetweenReplacing: 2
+  _distanceToPlayer: 1
 --- !u!1 &1746350804624267959
 GameObject:
   m_ObjectHideFlags: 0

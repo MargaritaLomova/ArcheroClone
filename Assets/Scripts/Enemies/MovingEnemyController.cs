@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class MovingEnemyController : BaseEnemyController
@@ -10,15 +7,18 @@ public class MovingEnemyController : BaseEnemyController
     [SerializeField]
     private float _movementSpeed;
     [SerializeField]
-    private float _timeBetweenReplacingAndShooting;
+    private float _timeBetweenReplacing = 2f;
     [SerializeField]
     private float _distanceToPlayer = 1f;
+
+    private bool _isMoving;
 
     protected override void Awake()
     {
         _player = FindObjectOfType<PlayerController>();
         _health = _startHealth;
         _isDead = false;
+        _isMoving = false;
 
         LookOnPlayer();
         MoveAndShoot();
@@ -26,35 +26,76 @@ public class MovingEnemyController : BaseEnemyController
 
     private void MoveAndShoot()
     {
-        MoveToPlayer(() => Shooting());
-    }
-
-    private async void MoveToPlayer(Helpers.Callback callback)
-    {
-        while (!_isDead)
+        Helpers.Delay(() => _isDead, null, () =>
         {
-            var newPosition = new Vector3(_player.transform.position.x - _distanceToPlayer, _player.transform.position.y, _player.transform.position.z - _distanceToPlayer);
-
-            _animator.SetTrigger("Move");
-
-            while (!_isDead && transform.position != newPosition)
+            if(!_isMoving)
             {
-                transform.position = Vector3.Lerp(transform.position, newPosition, Time.fixedDeltaTime * _movementSpeed);
+                var newPosition = new Vector3(_player.transform.position.x - _distanceToPlayer, 0, _player.transform.position.z - _distanceToPlayer);
+                if (transform.position != newPosition)
+                {
+                    _isMoving = true;
+                    _animator.SetTrigger("Move");
 
-                await Task.Delay((int)(Time.fixedDeltaTime * 1000));
+                    Helpers.Delay(() => _isDead || transform.position == newPosition,
+                    () =>
+                    {
+                        if (!_isDead)
+                        {
+                            _isMoving = false;
+                            Shoot();
+                        }
+                    },
+                    () =>
+                    {
+                        if (!_isDead)
+                            transform.position = Vector3.Lerp(transform.position, newPosition, Time.fixedDeltaTime * _movementSpeed);
+                    });
+                }
             }
 
-            callback?.Invoke();
-        }
-    }
+        }, _timeBetweenReplacing);
 
-    protected async override void Shooting()
-    {
-        await Task.Delay((int)((_timeBetweenShooting + _timeBetweenReplacingAndShooting) * 1000));
 
-        Debug.Log($"Shooting = {_isDead}");
 
-        if (!_isDead)
-            base.Shooting();
+
+        //Helpers.Delay(() => _isDead, null, () =>
+        //{
+        //    var newPosition = new Vector3(_player.transform.position.x - _distanceToPlayer, 0, _player.transform.position.z - _distanceToPlayer);
+        //    if (transform.position != newPosition)
+        //    {
+        //        _animator.SetTrigger("Move");
+
+        //        Helpers.Delay(() => _isDead || transform.position == newPosition,
+        //            () => Shoot(),
+        //            () => transform.position = Vector3.Lerp(transform.position, newPosition, Time.fixedDeltaTime * _movementSpeed));
+        //    }
+        //    else
+        //    {
+        //        Helpers.Delay(() => _isDead, null, () => Shoot(), _timeBetweenShooting);
+        //    }
+        //}, _timeBetweenReplacingAndShooting);
+
+
+
+
+        //var newPosition = new Vector3(_player.transform.position.x - _distanceToPlayer, 0, _player.transform.position.z - _distanceToPlayer);
+
+        //if (transform.position != newPosition)
+        //{
+        //    Helpers.Delay(() => _isDead, null, () =>
+        //    {
+        //        _animator.SetTrigger("Move");
+
+        //        Helpers.Delay(() => _isDead || transform.position == newPosition, 
+        //            null, 
+        //            () => transform.position = Vector3.Lerp(transform.position, newPosition, Time.fixedDeltaTime * _movementSpeed));
+
+        //        Shoot();
+        //    }, _timeBetweenReplacingAndShooting + _timeBetweenShooting);
+        //}
+        //else
+        //{
+        //    Helpers.Delay(() => _isDead, null, () => Shoot(), _timeBetweenShooting);
+        //}
     }
 }

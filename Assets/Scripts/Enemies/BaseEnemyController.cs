@@ -44,7 +44,7 @@ public class BaseEnemyController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("PlayerBullet"))
+        if (collision.gameObject.CompareTag("PlayerBullet"))
         {
             _animator.SetTrigger("Hit");
 
@@ -55,34 +55,33 @@ public class BaseEnemyController : MonoBehaviour
         }
     }
 
-    protected async virtual void Shooting()
+    protected void LookOnPlayer()
     {
-        while (!_isDead)
+        Helpers.Delay(() => _isDead, null, () =>
         {
-            _animator.SetTrigger("Shoot");
-
-            await Task.Delay((int)(0.2f * 1000));
-
             if (!_isDead)
-            {
-                var newBullet = Instantiate(_bulletPrefab);
-                newBullet.transform.position = transform.position;
-                newBullet.transform.rotation = transform.rotation;
-                newBullet.Damage = _bulletDamage;
-            }
+                transform.LookAt(_player.transform);
+        });
+    }
 
-            await Task.Delay((int)(_timeBetweenShooting * 1000));
+    protected async void Shoot()
+    {
+        _animator.SetTrigger("Shoot");
+
+        await Task.Delay((int)(0.2f * 1000));
+
+        if (!_isDead)
+        {
+            var newBullet = Instantiate(_bulletPrefab);
+            newBullet.transform.position = transform.position;
+            newBullet.transform.rotation = transform.rotation;
+            newBullet.Damage = _bulletDamage;
         }
     }
 
-    protected async void LookOnPlayer()
+    private void Shooting()
     {
-        while (!_isDead)
-        {
-            transform.LookAt(_player.transform);
-
-            await Task.Delay((int)(Time.fixedDeltaTime * 1000));
-        }
+        Helpers.Delay(() => _isDead, null, () => Shoot(), _timeBetweenShooting, true);
     }
 
     private void Death()
