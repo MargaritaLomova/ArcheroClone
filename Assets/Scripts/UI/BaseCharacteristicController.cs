@@ -20,6 +20,7 @@ public class BaseCharacteristicController : MonoBehaviour
 
     public void UpdateText(int newValue, bool isSmoothlyChange = true)
     {
+        _changeText.DOFade(0f, 0f);
         var currentValue = Int32.Parse(_text.text);
         if (newValue == currentValue)
             return;
@@ -27,7 +28,7 @@ public class BaseCharacteristicController : MonoBehaviour
         if (isSmoothlyChange)
             ShowChangeText(newValue, currentValue, () => SmoothlyChangeValue(newValue));
         else
-            ShowChangeText(newValue, currentValue, () => _text.text = $"{newValue}");
+            _text.text = $"{newValue}";
     }
 
     private void SmoothlyChangeValue(int newValue)

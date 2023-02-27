@@ -455,6 +455,7 @@ MonoBehaviour:
   _startHealth: 50
   _bulletDamage: 10
   _timeBetweenShooting: 3
+  _costForMurder: 10
 --- !u!65 &2129417801349984437
 BoxCollider:
   m_ObjectHideFlags: 0

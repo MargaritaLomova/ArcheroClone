@@ -20,6 +20,8 @@ public class BaseEnemyController : MonoBehaviour
     protected int _bulletDamage;
     [SerializeField]
     protected float _timeBetweenShooting;
+    [SerializeField]
+    protected int _costForMurder;
 
     public bool IsDead { get; protected set; }
 
@@ -46,12 +48,12 @@ public class BaseEnemyController : MonoBehaviour
     {
         if (collider.CompareTag("PlayerBullet"))
         {
-            _animator.SetTrigger("Hit");
-
             var currentDamage = collider.gameObject.GetComponent<BulletController>().Damage;
             _health -= currentDamage;
             if (_health <= 0)
                 Death();
+            else
+                _animator.SetTrigger("Hit");
         }
     }
 
@@ -84,7 +86,7 @@ public class BaseEnemyController : MonoBehaviour
 
     private void Death()
     {
-        _player.RemoveDeadEnemy(this);
+        _player.RemoveDeadEnemy(this, _costForMurder);
         IsDead = true;
         _animator.SetTrigger("Death");
         Destroy(gameObject, 2f);

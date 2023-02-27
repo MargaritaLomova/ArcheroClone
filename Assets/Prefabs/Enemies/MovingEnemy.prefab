@@ -107,9 +107,10 @@ MonoBehaviour:
   _startHealth: 50
   _bulletDamage: 10
   _timeBetweenShooting: 3
+  _costForMurder: 20
   _movementSpeed: 5
   _timeBetweenReplacing: 2
-  _distanceToPlayer: 1
+  _distanceToPlayer: 1.5
 --- !u!65 &2099160134507714279
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -598,7 +599,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2720816597427655702
 RectTransform:
   m_ObjectHideFlags: 0

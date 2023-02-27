@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     private Animator _animator;
 
     [Space]
-    [Header("Variables")]
+    [Header("Objects From Scene")]
     [SerializeField]
     private PlayerHealthController _playerHealth;
     [SerializeField]
@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private int _startHealth = 100;
     [SerializeField]
+    private int _startMoney = 0;
+    [SerializeField]
     private int _bulletDamage;
     [SerializeField]
     private float _timeBetweenShooting = 2f;
@@ -43,6 +45,7 @@ public class PlayerController : MonoBehaviour
     private List<BaseEnemyController> _currentEnemies = new List<BaseEnemyController>();
 
     private int _health;
+    private int _money;
 
     private bool _isMove;
     private bool _isDead;
@@ -50,8 +53,12 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _inputControls = new PlayerControl();
+
         _health = _startHealth;
         _playerHealth.UpdateText(_health, false);
+
+        _money = _startMoney;
+        _playerMoney.UpdateText(_money, false);
 
         GetCurrentEnemies();
         if (_currentEnemies != null && _currentEnemies.Count > 0)
@@ -90,8 +97,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void RemoveDeadEnemy(BaseEnemyController deadEnemy)
+    public void RemoveDeadEnemy(BaseEnemyController deadEnemy, int cost)
     {
+        _money += cost;
+        _playerMoney.UpdateText(_money);
+
         _currentEnemies.Remove(deadEnemy);
         SortEnemiesByDistance();
     }
