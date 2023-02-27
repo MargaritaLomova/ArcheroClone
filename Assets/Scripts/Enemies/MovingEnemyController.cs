@@ -52,50 +52,6 @@ public class MovingEnemyController : BaseEnemyController
                     });
                 }
             }
-
         }, _timeBetweenReplacing);
-
-
-
-
-        //Helpers.Delay(() => _isDead, null, () =>
-        //{
-        //    var newPosition = new Vector3(_player.transform.position.x - _distanceToPlayer, 0, _player.transform.position.z - _distanceToPlayer);
-        //    if (transform.position != newPosition)
-        //    {
-        //        _animator.SetTrigger("Move");
-
-        //        Helpers.Delay(() => _isDead || transform.position == newPosition,
-        //            () => Shoot(),
-        //            () => transform.position = Vector3.Lerp(transform.position, newPosition, Time.fixedDeltaTime * _movementSpeed));
-        //    }
-        //    else
-        //    {
-        //        Helpers.Delay(() => _isDead, null, () => Shoot(), _timeBetweenShooting);
-        //    }
-        //}, _timeBetweenReplacingAndShooting);
-
-
-
-
-        //var newPosition = new Vector3(_player.transform.position.x - _distanceToPlayer, 0, _player.transform.position.z - _distanceToPlayer);
-
-        //if (transform.position != newPosition)
-        //{
-        //    Helpers.Delay(() => _isDead, null, () =>
-        //    {
-        //        _animator.SetTrigger("Move");
-
-        //        Helpers.Delay(() => _isDead || transform.position == newPosition, 
-        //            null, 
-        //            () => transform.position = Vector3.Lerp(transform.position, newPosition, Time.fixedDeltaTime * _movementSpeed));
-
-        //        Shoot();
-        //    }, _timeBetweenReplacingAndShooting + _timeBetweenShooting);
-        //}
-        //else
-        //{
-        //    Helpers.Delay(() => _isDead, null, () => Shoot(), _timeBetweenShooting);
-        //}
     }
 }

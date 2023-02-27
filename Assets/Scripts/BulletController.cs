@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ public class BulletController : MonoBehaviour
     [SerializeField]
     private float _maxLifeTime = 5f;
     [SerializeField]
-    private string _targetTag;
+    private List<string> _targetTags = new List<string>();
 
     public int Damage { get; set; }
     public bool IsDestroyed { get; private set; }
@@ -27,7 +28,7 @@ public class BulletController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag(_targetTag))
+        if (_targetTags.Contains(collision.gameObject.tag))
             Destroy(gameObject);
     }
 
