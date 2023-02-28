@@ -6,6 +6,8 @@ public class BaseEnemyController : MonoBehaviour
     [Header("Components")]
     [SerializeField]
     protected Animator _animator;
+    [SerializeField]
+    protected EnemyAreaController _areaController;
 
     [Space]
     [Header("Prefabs")]
@@ -23,6 +25,7 @@ public class BaseEnemyController : MonoBehaviour
     [SerializeField]
     protected int _costForMurder;
 
+    public bool IsPlayerInEnemyArea => _areaController.IsPlayerInEnemyArea;
     public bool IsDead { get; protected set; }
 
     protected PlayerController _player;
@@ -68,14 +71,17 @@ public class BaseEnemyController : MonoBehaviour
 
     protected async void Shoot()
     {
-        _animator.SetTrigger("Shoot");
-
-        await Task.Delay((int)(0.2f * 1000));
-
-        if (!IsDead)
+        if (_areaController.IsPlayerInEnemyArea)
         {
-            var newBullet = Instantiate(_bulletPrefab);
-            newBullet.Set(transform, _bulletDamage);
+            _animator.SetTrigger("Shoot");
+
+            await Task.Delay((int)(0.2f * 1000));
+
+            if (!IsDead)
+            {
+                var newBullet = Instantiate(_bulletPrefab);
+                newBullet.Set(transform, _bulletDamage);
+            }
         }
     }
 

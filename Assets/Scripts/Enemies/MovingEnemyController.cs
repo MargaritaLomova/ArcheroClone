@@ -28,7 +28,7 @@ public class MovingEnemyController : BaseEnemyController
     {
         Helpers.Delay(() => IsDead, null, () =>
         {
-            if(!_isMoving)
+            if(!_isMoving && _areaController.IsPlayerInEnemyArea)
             {
                 var newPosition = new Vector3(_player.transform.position.x - _distanceToPlayer, 0, _player.transform.position.z - _distanceToPlayer);
                 if (transform.position != newPosition)

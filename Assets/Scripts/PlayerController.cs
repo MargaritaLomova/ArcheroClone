@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
     public void SortEnemiesByDistance()
     {
         if (_currentEnemies != null && _currentEnemies.Count > 0)
-            _currentEnemies = _currentEnemies.OrderBy(enemy => Vector2.Distance(transform.position, enemy.transform.position)).Reverse().ToList();
+            _currentEnemies = _currentEnemies.OrderBy(enemy => Vector2.Distance(transform.position, enemy.transform.position)).ToList();
     }
 
     private void OnMove(InputAction.CallbackContext context)
@@ -168,7 +168,7 @@ public class PlayerController : MonoBehaviour
         Helpers.Delay(() => _isMove || _currentEnemies.Count == 0, null, () =>
         {
             var aliveEnemies = _currentEnemies.Where(enemy => !enemy.IsDead).ToList();
-            if (!_isDead && aliveEnemies != null && aliveEnemies.Count > 0)
+            if (!_isDead && aliveEnemies != null && aliveEnemies.Count > 0 && aliveEnemies[0].IsPlayerInEnemyArea)
             {
                 transform.LookAt(aliveEnemies[0].transform);
 
