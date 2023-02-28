@@ -17,6 +17,10 @@ public class PlayerController : MonoBehaviour
     private PlayerHealthController _playerHealth;
     [SerializeField]
     private PlayerMoneyController _playerMoney;
+    [SerializeField]
+    private LoseMenuController _loseMenu;
+    [SerializeField]
+    private WinMenuController _winMenu;
 
     [Space]
     [Header("Prefabs")]
@@ -177,11 +181,15 @@ public class PlayerController : MonoBehaviour
                 var newBullet = Instantiate(_bulletPrefab);
                 newBullet.Set(transform, _bulletDamage, aliveEnemies[0].transform);
             }
+            else if(!_isDead && aliveEnemies.Count == 0)
+                _winMenu.OpenMenu();
         }, _timeBetweenShooting);
     }
 
     private void Death()
     {
         _animator.SetTrigger("Death");
+
+        _loseMenu.OpenMenu();
     }
 }
